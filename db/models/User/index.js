@@ -1,29 +1,31 @@
+// Config
+const currentEnv = require("../../../config/env").env
+const config = require(`../../../config/${currentEnv}config.json`)
+
 const mongoose = require("mongoose")
 const uniqueValidator = require('mongoose-unique-validator')
 
+const Schema = mongoose.Schema
+
 const userSchema = new mongoose.Schema({
-  userID: {
+  email: {
     type: String,
     required: true,
     unique: true
   },
-  email: {
-    type: String,
-    required: true,
-    trim: true,
-    unique: true,
-  },
-  hash: {
+  password: {
     type: String,
     required: true
   },
-  created: {
-    type: Date,
-    required: true,
-    default: Date.now
-  }
+  createdEvents: [
+    {
+      type: Schema.Types.ObjectID,
+      ref: "Event"
+    }
+  ]
 }, {
-  versionKey: false
+  versionKey: false,
+  timestamps: true
 })
 
 userSchema.plugin(uniqueValidator)
