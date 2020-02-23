@@ -1,7 +1,3 @@
-// Config
-const currentEnv = require("../../../config/env").env
-const config = require(`../../../config/${currentEnv}config.json`)
-
 const mongoose = require("mongoose")
 const uniqueValidator = require('mongoose-unique-validator')
 
