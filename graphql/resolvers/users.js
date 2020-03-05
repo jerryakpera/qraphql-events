@@ -1,6 +1,12 @@
+const jwt = require("jsonwebtoken")
 const User = require("../../db/models/User")
 const _ = require("../../services/utils")
-const { transformUser  } = require("./merge")
+const {
+  transformUser
+} = require("./merge")
+// Config
+const currentEnv = require("../../config/env").env
+const config = require(`../../config/${currentEnv}config.json`)
 
 module.exports = {
   users: () => {
@@ -29,24 +35,37 @@ module.exports = {
       throw err
     })
   },
-  login: ({email, password}) => {
-    User.findOne({email})
-    .then(user => {
-      if (!user) {
-        throw new Error("Invalid credentials")
+  login: async ({
+    email,
+    password
+  }) => {
+    const user = await User.findOne({
+      email: email
+    })
+
+    if (!user) {
+      throw new Error("Invalid credentials!")
+    }
+    
+    const isEqual = await _.comparePassword(password, user.password)
+    
+    if (!isEqual) {
+      throw new Error("Invalid credentials!")
+    }
+
+    const token = jwt.sign({
+        userID: user._id,
+        email: user.email
+      },
+      config.secret, {
+        expiresIn: "1h"
       }
-      _.comparePassword(password, user.password).then(isEqual => {
-        if (!isEqual) {
-          throw new Error("Invalid credentials")
-        }
-        
-      })
-      .catch(err => {
-        throw err
-      })
-    })
-    .catch(err => {
-      throw err
-    })
+    )
+
+    return {
+      userID: user._id,
+      token,
+      tokenExpiration: 1
+    }
   }
 }
