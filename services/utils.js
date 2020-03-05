@@ -1,8 +1,11 @@
-const bcryptjs = require("bcryptjs")
+const bcrypt = require("bcryptjs")
 
 module.exports = {
   getHash: (password) => {
-    return bcryptjs.hash(password, 12)
+    return bcrypt.hash(password, 12)
   },
-  getDateFromString: (dateString) => new Date(dateString).toISOString()
+  getDateFromString: (dateString) => new Date(dateString).toISOString(),
+  comparePassword: (password1, password2) => {
+    return bcrypt.compare(password1, password2)
+  }
 }

@@ -28,5 +28,25 @@ module.exports = {
     }).catch(err => {
       throw err
     })
+  },
+  login: ({email, password}) => {
+    User.findOne({email})
+    .then(user => {
+      if (!user) {
+        throw new Error("Invalid credentials")
+      }
+      _.comparePassword(password, user.password).then(isEqual => {
+        if (!isEqual) {
+          throw new Error("Invalid credentials")
+        }
+        
+      })
+      .catch(err => {
+        throw err
+      })
+    })
+    .catch(err => {
+      throw err
+    })
   }
 }
