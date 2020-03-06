@@ -37,7 +37,6 @@ module.exports = buildSchema(`
 
   input BookingInput {
     event: String!
-    user: String!
   }
 
   input EventInput {
@@ -45,7 +44,6 @@ module.exports = buildSchema(`
     description: String!
     price: Float!
     date: String!
-    creator: String!
   }
 
   input UserInput {

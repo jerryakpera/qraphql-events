@@ -3,10 +3,13 @@ const bodyParser = require("body-parser")
 const graphqlHttp = require("express-graphql")
 const schema = require("./graphql/schema")
 const resolvers = require("./graphql/resolvers")
+const isAuth = require("./middleware/isAuth")
 
 const app = express()
 // console.log(resolvers)
 app.use(bodyParser.json())
+
+app.use(isAuth)
 
 // Create graphql endpoint 
 app.use("/graphql", graphqlHttp({
